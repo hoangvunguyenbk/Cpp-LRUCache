@@ -1,0 +1,16 @@
+#ifndef CONFIG_H
+#define CONFIG_H
+
+//Related paths configuration
+#define WORKSPACE "@WORKSPACE_DIR@"
+#define SRC "@SRC_DIR@"
+#define INC "@INC_DIR@"
+#define READERS "@READERS_DIR@"
+#define WRITERS "@WRITERS_DIR@"
+#define READER_OUTPUT "@READERS_OUTPUT_DIR@"
+
+#endif // CONFIG_H
+
+
+
+
