@@ -10,15 +10,20 @@ Run file setup.sh in <*ClonedProjectPath*> to install prerequisites tools:
 
 Build project: 
 1. Create a new folder named "build" by using command: 
+
     **mkdir build**
-2. Navigate to the created folder: 
+2. Navigate to the created folder:
+
     **cd build/**
-3. Configure cmake projet: 
+3. Configure cmake projet:
+
     **cmake ..**
-4. Build project : 
+4. Build project:
+
     **make**
 
 Run project: 
+
 ***Note:*** Repository contains 3 sample input data files named: Readers, Writers, Items. 
 In order to test with different set of data files, please use following steps:
 1. Put 3 required input files (readers_file, writers_file, items_file) into <*ClonedProjectPath*>/data/ folder
