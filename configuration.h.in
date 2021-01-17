@@ -1,13 +1,16 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-//Related paths configuration
+//paths configuration
+//This is generated file, do not modify it
 #define WORKSPACE "@WORKSPACE_DIR@"
+#define DATA "@DATA_DIR@"
 #define SRC "@SRC_DIR@"
 #define INC "@INC_DIR@"
 #define READERS "@READERS_DIR@"
 #define WRITERS "@WRITERS_DIR@"
 #define READER_OUTPUT "@READERS_OUTPUT_DIR@"
+#define BUILD_OUTPUT "@BUILD_DIR@"
 
 #endif // CONFIG_H
 

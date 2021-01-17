@@ -1,8 +1,0 @@
-101	Cache	
-505	Disk	
-300	Disk	
-202	Disk	
-45	Disk	
-300	Cache	
-800	Disk	
-808	Disk	

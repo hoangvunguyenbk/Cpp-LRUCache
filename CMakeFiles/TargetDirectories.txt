@@ -1,3 +1,0 @@
-/home/vu/LRUCache/CMakeFiles/rebuild_cache.dir
-/home/vu/LRUCache/CMakeFiles/edit_cache.dir
-/home/vu/LRUCache/CMakeFiles/LRUCache.dir
