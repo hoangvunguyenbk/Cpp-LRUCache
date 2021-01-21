@@ -14,7 +14,6 @@ Run file setup.sh in <*ClonedProjectPath*> with sudo privilege to install prereq
     **./setup.sh**
 
 Build project: 
-
 1. Create a new folder named "build" by using command: 
 
     **mkdir build**
