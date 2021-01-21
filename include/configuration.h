@@ -11,6 +11,7 @@
 #define WRITERS "/home/vu/Cpp-LRUCache/writers/"
 #define READER_OUTPUT "/home/vu/Cpp-LRUCache/reader_output/"
 #define BUILD_OUTPUT "/home/vu/Cpp-LRUCache/build/"
+#define UNITTEST "/home/vu/Cpp-LRUCache/unittest/"
 
 #endif // CONFIG_H
 

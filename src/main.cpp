@@ -14,34 +14,38 @@
 typedef std::shared_ptr<LRUCache<std::string, std::string>> SHARED_CACHE;
 typedef void (*ThreadFunc)(std:: string, SHARED_CACHE);
 std::mutex disk_mutex;
-std::string disk_memoryName;
+std::string disk_memory_name;
 
 int main(int argc, char *argv[]) {
 
-	int cache_capacity = std::atoi(argv[1]);
 
-	//not process if parameters are wrong or missing
-	if((argc < 5) || (cache_capacity <= 0)) {
+	if(argc < 5){
 		std::cout << "Please enter valid input!\n";
 		std::cout << "Example: ./LRUCache <size_of_cache> <reader_file> <writer_file> <items_file>\n"; 
 		return -1;
 	}
 
+	//not process if parameters are wrong or missing
+	int cache_capacity = std::atoi(argv[1]);
+	if(cache_capacity <= 0) {
+		return -1;
+	}
+
 	//load readers, writers file
-	char* readersFile = argv[2];
-	char* writersFile = argv[3];
-	char* itemsFile = argv[4];
+	char* readers_file = argv[2];
+	char* writers_file = argv[3];
+	char* items_file = argv[4];
 
 	//store path of data folder
 	char data_path[max_filename_lengh];
-	Util::getFullPath(data_path, DATA, argv[4]);
+	Util::GetFullPath(data_path, DATA, argv[4]);
 
 	//init LRU Cache object and set disk memory file name
-	SHARED_CACHE cacheObj = std::make_shared<LRUCache<std::string, std::string>>(cache_capacity);
-	disk_memoryName = itemsFile;
+	SHARED_CACHE cache_obj = std::make_shared<LRUCache<std::string, std::string>>(cache_capacity);
+	disk_memory_name = items_file;
 
-	std::ifstream readers(readersFile, std::ios::in);
-	std::ifstream writers(writersFile, std::ios::in);
+	std::ifstream readers(readers_file, std::ios::in);
+	std::ifstream writers(writers_file, std::ios::in);
 	std::vector<std::thread> vThreadReader, vThreadWriters;
 	std::string line;
 
@@ -58,33 +62,33 @@ int main(int argc, char *argv[]) {
 
 	//start reader threads
 	while(std::getline(readers, line)) {
-		vThreadReader.push_back(std::thread(&Reader::ProcessInputData, Reader(cacheObj, line)));
+		vThreadReader.push_back(std::thread(&Reader::ProcessInputData, Reader(cache_obj, line)));
 	}
 
 	//start wrters threads
 	while(std::getline(writers, line)) {
-		vThreadWriters.push_back(std::thread(&Writer::ProcessInputData, Writer(cacheObj, line)));
+		vThreadWriters.push_back(std::thread(&Writer::ProcessInputData, Writer(cache_obj, line)));
 	}
 
     for_each(vThreadReader.begin(), vThreadReader.end(), [](std::thread &t){ t.join();});
     for_each(vThreadWriters.begin(), vThreadWriters.end(), [](std::thread &t){ t.join();});
 
     //cache display content
-	//cacheObj->display();
+	//cache_obj->Display();
 
-	//place processed data file with original one
-	char processedData [max_filename_lengh];
+	//replace processed data file with original one
+	char processed_data [max_filename_lengh];
 	try {
-		Util::getFullPath(processedData, BUILD_OUTPUT, argv[4]);
+		Util::GetFullPath(processed_data, BUILD_OUTPUT, argv[4]);
 
-		if (!boost::filesystem::exists(processedData))
+		if (!boost::filesystem::exists(processed_data))
 		{
   			std::cout << "Can't find processed data file!" << std::endl;
   			return -1;
 		}
 
 		remove(data_path);
-		boost::filesystem::copy_file(processedData, data_path);
+		boost::filesystem::copy_file(processed_data, data_path);
 	}
 	catch (boost::filesystem::filesystem_error& e) {
 		std::cout << "Error while replace data: " << std::endl;

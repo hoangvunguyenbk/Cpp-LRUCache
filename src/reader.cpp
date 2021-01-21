@@ -7,8 +7,8 @@ void Reader::ProcessInputData() {
 	char file[max_filename_lengh];
 	char output_file[max_filename_lengh];
 
-	Util::getFullPath(file, READERS, m_inputData.c_str());
-	Util::getFullPath(output_file, READER_OUTPUT, m_inputData.c_str());
+	Util::GetFullPath(file, READERS, m_input_data.c_str());
+	Util::GetFullPath(output_file, READER_OUTPUT, m_input_data.c_str());
 
 	//format output file
 	strcat(output_file, ".out");
@@ -19,8 +19,9 @@ void Reader::ProcessInputData() {
 
 	//sanitize check
 	if(!readerfs.is_open()) {
-		std::cout << "(Reader object) " << m_inputData << ": writer data not found" << std::endl;
-		std::cout << "Please remove it's entry from readers list file or add it to readers folder" << std::endl;
+		std::cout << "(Reader object) " << m_input_data << ": reader data not found" << std::endl;
+		std::cout << "Please check the file format and the order of your command parameters.\n";
+		std::cout << "If input data file not exist in readers folder, please remove it's entry from the readers list.\n\n";
 		return;
 	}
 
@@ -31,12 +32,12 @@ void Reader::ProcessInputData() {
 		//lookup in the cache memory
 		bool isCacheHit = false;
 		if(!line.empty()) {
-			isCacheHit = m_lrucache->get(line, value);
+			isCacheHit = m_lrucache->Get(line, value);
 			if(!isCacheHit) {
 				//lookup from the disk
 				MemoryRequest(std::atoi(line.c_str()), value);
 				//put new value to the cache
-				m_lrucache->put(line, value);
+				m_lrucache->Put(line, value);
 			}
 		}
 
@@ -54,13 +55,13 @@ void Reader::MemoryRequest(int position, std::string &value) {
 
 	std::lock_guard<std::mutex> locker(disk_mutex);
 
-	std::ifstream readerfs(m_memoryName, std::ios::in);
+	std::ifstream readerfs(m_memory_name, std::ios::in);
 	std::string line;
 	size_t lineno = 1;
 
 	//sanitize check
 	if(!readerfs.is_open()) {
-		std::cout << "(Reader object) memory data named: '" << m_memoryName << "' not found " << std::endl;
+		std::cout << "(Reader object) memory data named: '" << m_memory_name << "' not found " << std::endl;
 		std::cout << "Please copy from data folder to build folder\n";
 		return;
 	}

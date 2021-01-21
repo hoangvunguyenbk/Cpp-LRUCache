@@ -14,7 +14,7 @@ public:
 	  Input  : reader file name. Etc: Reader[i].txt
 	  Output : absolute path of the file on filesystem. etc: /home/user/output/Reader[i].out.txt 
 	*/
-	static void getFullPath(char* file, const char* path, const char* file_name) {
+	static void GetFullPath(char* file, const char* path, const char* file_name) {
 		strcpy(file, path);
 		strcat(file, file_name);
 	}
@@ -23,7 +23,7 @@ public:
 	  Input  : a string represent for position and value to write. Etc <entry value>
 	  Output : a string represent for value of the entry 
 	*/
-	static void getValueOfEntry(std::string &entry, std::string &value) {
+	static void GetValueOfEntry(std::string &entry, std::string &value) {
 		
 		std::string space = " ";
 		int pos = entry.find(space);

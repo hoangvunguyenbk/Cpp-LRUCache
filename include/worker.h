@@ -14,7 +14,7 @@
 #define max_filename_lengh 100
 
 extern std::mutex disk_mutex;
-extern std::string disk_memoryName;
+extern std::string disk_memory_name;
 typedef std::shared_ptr<LRUCache<std::string, std::string>> SHARED_CACHE;
 
 /*
@@ -24,7 +24,7 @@ class Worker {
 
 public:
 	Worker()
-	:m_memoryName(disk_memoryName) {}
+	:m_memory_name(disk_memory_name) {}
 
 	virtual ~Worker() {}
 
@@ -32,7 +32,7 @@ public:
 	virtual void MemoryRequest(){};
 
 protected:
-	std::string m_memoryName;
+	std::string m_memory_name;
 };
 
 /*
@@ -42,7 +42,7 @@ class Reader : public Worker {
 
 public:
 	Reader(SHARED_CACHE cache, std::string &data)
-	:m_lrucache(cache), m_inputData(data) {}
+	:m_lrucache(cache), m_input_data(data) {}
 
 	virtual ~Reader() {}
 
@@ -50,7 +50,7 @@ public:
 	void MemoryRequest(int position, std::string &value);
 
 private:
-	std::string m_inputData;
+	std::string m_input_data;
 	SHARED_CACHE m_lrucache;
 
 };
@@ -62,7 +62,7 @@ class Writer : public Worker {
 
 public:
 	Writer(SHARED_CACHE cache, std::string &data)
-	:m_lrucache(cache), m_inputData(data) {}
+	:m_lrucache(cache), m_input_data(data) {}
 
 	virtual ~Writer() {}
 
@@ -70,7 +70,7 @@ public:
 	void MemoryRequest(int position, std::string &vaue);
 
 private:
-	std::string m_inputData;
+	std::string m_input_data;
 	SHARED_CACHE m_lrucache;
 };
 

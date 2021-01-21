@@ -3,32 +3,35 @@
 #include <boost/filesystem.hpp>
 #include "worker.h"
 
+#define UNIT_TEST
+
 void Writer::ProcessInputData() {
 		
 	char file[max_filename_lengh];
 	std::string line;
 	std::string res;
 
-	Util::getFullPath(file, WRITERS, m_inputData.c_str());
+	Util::GetFullPath(file, WRITERS, m_input_data.c_str());
 	std::ifstream writersfs(file);
 
 	//sanitize check
 	if(!writersfs.is_open()) {
-		std::cout << "(Writer object) " << m_inputData << ": writer data not found" << std::endl;
-		std::cout << "Please remove it's entry from writers list file or add it to writers folder" << std::endl;
+		std::cout << "(Writer object) " << m_input_data << ": writer data not found" << std::endl;
+		std::cout << "Please check the file format and the order of your command parameters.\n";
+		std::cout << "If input data file not exist in readers folder, please remove it's entry from the writers list.\n\n";
 		return;
 	}
 
 	//write-though policy
 	while(std::getline(writersfs, line)) {
 		std::string value = "";
-		Util::getValueOfEntry(line, value);
+		Util::GetValueOfEntry(line, value);
 
 		//lookup in the cache memory
 		if(!line.empty()) {
-			bool bCacheHit = m_lrucache->get(line, value);
+			bool bCacheHit = m_lrucache->Get(line, value);
 			if(bCacheHit)
-				m_lrucache->put(line, value);
+				m_lrucache->Put(line, value);
 		}
 		MemoryRequest(std::atoi(line.c_str()), value);
 	}
@@ -40,14 +43,14 @@ void Writer::MemoryRequest(int position, std::string &value) {
 
 	std::lock_guard<std::mutex> locker(disk_mutex);
 
-	std::ifstream inputfs(m_memoryName);
+	std::ifstream inputfs(m_memory_name);
 	std::fstream outputfs("newfile.txt", std::ios::out);
 	std::string line;
 	size_t lineno = 0;
 
 	//sanitize check
 	if(!inputfs.is_open()) {
-		std::cout << "(Writer object) memory data named: '" << m_memoryName << "' not found " << std::endl;
+		std::cout << "(Writer object) memory data named: '" << m_memory_name << "' not found " << std::endl;
 		std::cout << "Please copy from data folder to build folder\n";
 		return;
 	}
@@ -69,8 +72,8 @@ void Writer::MemoryRequest(int position, std::string &value) {
   		std::cout << "(Writer object) can't find processed file!" << std::endl;
   		return;
 	}
-	if(remove(m_memoryName.c_str()) != 0)
+	if(remove(m_memory_name.c_str()) != 0)
     	std::cout << "(Writer object): " << strerror(errno) << std::endl;    	
-    if(rename("newfile.txt", m_memoryName.c_str()) != 0)
+    if(rename("newfile.txt", m_memory_name.c_str()) != 0)
     	std::cout << "(Writer object): " << strerror(errno) << std::endl;  
 }

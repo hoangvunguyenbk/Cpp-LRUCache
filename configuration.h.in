@@ -11,6 +11,7 @@
 #define WRITERS "@WRITERS_DIR@"
 #define READER_OUTPUT "@READERS_OUTPUT_DIR@"
 #define BUILD_OUTPUT "@BUILD_DIR@"
+#define UNITTEST "@UNITTEST_DIR@"
 
 #endif // CONFIG_H
 

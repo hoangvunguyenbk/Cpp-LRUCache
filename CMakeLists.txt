@@ -13,6 +13,7 @@ set(WRITERS_DIR ${WORKSPACE_DIR}/writers/)
 set(READERS_OUTPUT_DIR ${WORKSPACE_DIR}/reader_output/)
 set(DATA_DIR ${WORKSPACE_DIR}/data/)
 set(BUILD_DIR ${WORKSPACE_DIR}/build/)
+set(UNITTEST_DIR ${WORKSPACE_DIR}/unittest/)
 
 ##########################################################################################################################
 
@@ -30,6 +31,9 @@ target_link_libraries(${PROJECT_NAME} -lpthread -lboost_filesystem)
 ##########################################################################################################################
 #Copy data to build folder
 add_custom_command(TARGET LRUCache POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${DATA_DIR}/* ${BUILD_DIR})
+
+#Unit test
+add_subdirectory(unittest)
 
 
 

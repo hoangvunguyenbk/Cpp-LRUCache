@@ -24,8 +24,8 @@ private:
 	typedef std::unordered_map<KeyType, LRUListPos> LRUMap;
 
 	int m_capacity;
-	LRUList m_cacheList;
-	LRUMap m_cacheMap;
+	LRUList m_cache_list;
+	LRUMap m_cache_map;
 	std::mutex m_cache_mutex;
 
 public:
@@ -43,32 +43,32 @@ public:
 	/* 
 		Print out value of the cache
 	*/
-	void display();
+	void Display();
 
 	/*
 		Get value by key
 		Return true if key found, otherwise return false
 	*/
-	bool get(const KeyType &key, ValueType &value);
+	bool Get(const KeyType &key, ValueType &value);
 	
 	/* 
 		Put item to cache list and update positions
 	*/
-	void put(const KeyType &key, const ValueType &value);
+	void Put(const KeyType &key, const ValueType &value);
 };
 
 template <typename KeyType, typename ValueType>
-void LRUCache<KeyType, ValueType>::display() {
+void LRUCache<KeyType, ValueType>::Display() {
 
 	std::lock_guard<std::mutex> lock(m_cache_mutex);
 	std::cout << "Hash map keys table: \n";
-	for_each(m_cacheMap.begin(), m_cacheMap.end(), [](std::pair<KeyType, LRUListPos> item) {
+	for_each(m_cache_map.begin(), m_cache_map.end(), [](std::pair<KeyType, LRUListPos> item) {
 		std::cout << item.first << '\t';
 	});
 	std::cout << std::endl;
 
 	std::cout << "List: \n";
-	for_each(m_cacheList.begin(), m_cacheList.end(), [](CacheItem &item){
+	for_each(m_cache_list.begin(), m_cache_list.end(), [](CacheItem &item){
 		std::cout << "[key: " << item.m_key << ",value: " << item.m_value << "]\t";
 	});
 	std::cout << std::endl;
@@ -76,51 +76,51 @@ void LRUCache<KeyType, ValueType>::display() {
 
 
 template <typename KeyType, typename ValueType>
-bool LRUCache<KeyType, ValueType>::get(const KeyType &key, ValueType &value) {
+bool LRUCache<KeyType, ValueType>::Get(const KeyType &key, ValueType &value) {
 
 	std::lock_guard<std::mutex> lock(m_cache_mutex);
 
 	//key not found in cache map
-	if(m_cacheMap.count(key) == 0) {
+	if(m_cache_map.count(key) == 0) {
 		return false;
 	}
 	//key found in cache map
 	else {
 		//backup and erase current Item
-		LRUListPos currentPos = m_cacheMap[key];
-		CacheItem currentItem = *currentPos;
-		m_cacheList.erase(currentPos);
+		LRUListPos current_pos = m_cache_map[key];
+		CacheItem currentItem = *current_pos;
+		m_cache_list.erase(current_pos);
 		//move Item to the front and update cache map
-		m_cacheList.push_front(*currentPos);
-		m_cacheMap[key] = m_cacheList.begin();
-		value = m_cacheList.front().m_value;
+		m_cache_list.push_front(*current_pos);
+		m_cache_map[key] = m_cache_list.begin();
+		value = m_cache_list.front().m_value;
 		return true;
 	}		
 }
 
 
 template <typename KeyType, typename ValueType>
-void LRUCache<KeyType, ValueType>::put(const KeyType &key, const ValueType &value) {
+void LRUCache<KeyType, ValueType>::Put(const KeyType &key, const ValueType &value) {
 
 	std::lock_guard<std::mutex> lock(m_cache_mutex);
 	
 	//key not found in cache map
-	if(m_cacheMap.count(key) == 0) {
+	if(m_cache_map.count(key) == 0) {
 		//if list is full, evict the last item in list
-		if(m_cacheList.size() == m_capacity) {
-			KeyType old_key = m_cacheList.back().m_key;
-			m_cacheMap.erase(old_key);
-			m_cacheList.pop_back();
+		if(m_cache_list.size() == m_capacity) {
+			KeyType old_key = m_cache_list.back().m_key;
+			m_cache_map.erase(old_key);
+			m_cache_list.pop_back();
 		}
 	}
 	//key found in the cache map
 	else {
 		//move Item to the front
-		LRUListPos currentPos = m_cacheMap[key];
-		m_cacheList.erase(currentPos);
+		LRUListPos current_pos = m_cache_map[key];
+		m_cache_list.erase(current_pos);
 	}
-	m_cacheList.push_front(CacheItem(key, value));
-	m_cacheMap[key] = m_cacheList.begin();		
+	m_cache_list.push_front(CacheItem(key, value));
+	m_cache_map[key] = m_cache_list.begin();		
 }
 
 #endif //CACHE_H
