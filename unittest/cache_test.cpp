@@ -43,7 +43,7 @@ TEST_F(LRUCaheTest, TestGet) {
 
 
   cache->Put(2,"Two");
-  ASSERT_EQ(cache->Get(2, retrived_value), true); // {2 : "II"}, 4, 5
+  ASSERT_EQ(cache->Get(2, retrived_value), true); // {2 : "Two"}, 4, 5
   ASSERT_EQ(retrived_value, "Two");
 
   // Cache-entries : {2, "Two"}, {4, "4"}, {5, "5"}
@@ -68,7 +68,7 @@ TEST_F(LRUCaheTest, TestPut) {
   ASSERT_EQ(retrived_value, "4");
 
   cache->Put(2,"Two");
-  ASSERT_EQ(cache->Get(2, retrived_value), true); // II,4,5
+  ASSERT_EQ(cache->Get(2, retrived_value), true); // Two,4,5
   ASSERT_EQ(retrived_value, "Two");
 
   // Cache-entries : {2, "Two"}, {4, "4"}, {5, "5"}

@@ -3,7 +3,6 @@
 #include <boost/filesystem.hpp>
 #include "worker.h"
 
-#define UNIT_TEST
 
 void Writer::ProcessInputData() {
 		
